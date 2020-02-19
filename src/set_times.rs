@@ -1,13 +1,13 @@
-use super::as_file;
 use crate::SystemTimeSpec;
 use std::{fs, io, path::Path, time::SystemTime};
+use unsafe_io::AsUnsafeFile;
 #[cfg(not(windows))]
 use {
     posish::{
         fs::{cwd, futimens, utimensat, AtFlags},
         time::{timespec, UTIME_NOW, UTIME_OMIT},
     },
-    std::{convert::TryInto, os::unix::io::AsRawFd},
+    std::convert::TryInto,
 };
 #[cfg(windows)]
 use {
@@ -171,10 +171,9 @@ pub trait SetTimes {
     ) -> io::Result<()>;
 }
 
-#[cfg(not(windows))]
 impl<T> SetTimes for T
 where
-    T: AsRawFd,
+    T: AsUnsafeFile,
 {
     #[inline]
     fn set_times(
@@ -182,7 +181,7 @@ where
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
-        _set_file_times(unsafe { &as_file(self) }, atime, mtime)
+        _set_file_times(&self.as_file_view(), atime, mtime)
     }
 }
 
@@ -222,21 +221,6 @@ pub(crate) fn to_timespec(ft: Option<SystemTimeSpec>) -> io::Result<timespec> {
             }
         }
     })
-}
-
-#[cfg(windows)]
-impl<T> SetTimes for T
-where
-    T: AsRawHandle,
-{
-    #[inline]
-    fn set_times(
-        &self,
-        atime: Option<SystemTimeSpec>,
-        mtime: Option<SystemTimeSpec>,
-    ) -> io::Result<()> {
-        _set_file_times(unsafe { &as_file(self) }, atime, mtime)
-    }
 }
 
 #[cfg(windows)]
