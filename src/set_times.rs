@@ -234,7 +234,7 @@ where
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
-        _set_file_times(unsafe { &*as_file(self) }, atime, mtime)
+        _set_file_times(unsafe { &as_file(self) }, atime, mtime)
     }
 }
 
