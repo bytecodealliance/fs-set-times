@@ -8,7 +8,7 @@ pub enum SystemTimeSpec {
     /// the current time.
     SymbolicNow,
 
-    /// An abslute time value.
+    /// An absolute time value.
     Absolute(SystemTime),
 }
 
