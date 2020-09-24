@@ -12,7 +12,7 @@ categories = ["filesystem", "network-programming"]
 readme = "README.md"
 
 [target.'cfg(not(windows))'.dependencies]
-posish = "0.2.0"
+posish = "0.3.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winerror", "std"] }
