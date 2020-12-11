@@ -272,7 +272,7 @@ fn _set_file_times(
     let mtime = mtime.map(to_filetime).transpose()?;
     if unsafe {
         SetFileTime(
-            file.as_raw_handle(),
+            file.as_raw_handle() as winapi::um::winnt::HANDLE,
             ptr::null(),
             atime.as_ref().map(|r| r as *const _).unwrap_or(ptr::null()),
             mtime.as_ref().map(|r| r as *const _).unwrap_or(ptr::null()),
