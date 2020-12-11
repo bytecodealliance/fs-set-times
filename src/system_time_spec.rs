@@ -3,9 +3,8 @@ use std::time::SystemTime;
 /// A value for specifying a time.
 #[derive(Debug)]
 pub enum SystemTimeSpec {
-    /// A value which always represents the current time, in symbolic
-    /// form, so that even as time elapses, it continues to represent
-    /// the current time.
+    /// A value which always represents the current time, in symbolic form, so
+    /// that even as time elapses, it continues to represent the current time.
     SymbolicNow,
 
     /// An absolute time value.

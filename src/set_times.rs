@@ -155,7 +155,8 @@ fn _set_symlink_times(
     Err(io::Error::from_raw_os_error(ERROR_NOT_SUPPORTED as i32))
 }
 
-/// An extension trait for `std::fs::File`, `cap_std::fs::File`, and similar types.
+/// An extension trait for `std::fs::File`, `cap_std::fs::File`, and similar
+/// types.
 pub trait SetTimes {
     /// Set the last access and last modification timestamps of an open file
     /// handle.
