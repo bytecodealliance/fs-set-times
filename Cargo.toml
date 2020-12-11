@@ -7,8 +7,8 @@ documentation = "https://docs.rs/fs-set-times"
 license = "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT"
 repository = "https://github.com/bytecodealliance/fs-set-times"
 edition = "2018"
-keywords = ["api", "network", "file"]
-categories = ["filesystem", "network-programming"]
+keywords = ["api", "file"]
+categories = ["filesystem"]
 readme = "README.md"
 
 [target.'cfg(not(windows))'.dependencies]
