@@ -163,7 +163,7 @@ pub trait SetTimes {
     ///
     /// This corresponds to [`filetime::set_file_handle_times`].
     ///
-    /// [`filetime::set_file_handle_times`]: https://docs.rs/filetime/current/filetime/fn.set_file_handle_times.html
+    /// [`filetime::set_file_handle_times`]: https://docs.rs/filetime/latest/filetime/fn.set_file_handle_times.html
     fn set_times(
         &self,
         atime: Option<SystemTimeSpec>,
