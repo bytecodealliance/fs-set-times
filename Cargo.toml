@@ -12,7 +12,7 @@ categories = ["filesystem"]
 readme = "README.md"
 
 [target.'cfg(not(windows))'.dependencies]
-posish = "0.5.2"
+posish = "0.5.4"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winerror"] }
