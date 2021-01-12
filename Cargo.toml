@@ -11,6 +11,9 @@ keywords = ["api", "file"]
 categories = ["filesystem"]
 readme = "README.md"
 
+[dependencies]
+unsafe-io = "0.0.1"
+
 [target.'cfg(not(windows))'.dependencies]
 posish = "0.5.4"
 

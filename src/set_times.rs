@@ -1,6 +1,6 @@
-use super::as_file;
 use crate::SystemTimeSpec;
 use std::{fs, io, path::Path, time::SystemTime};
+use unsafe_io::AsUnsafeFile;
 #[cfg(not(windows))]
 use {
     posish::{
@@ -182,7 +182,7 @@ where
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
-        _set_file_times(unsafe { &as_file(self) }, atime, mtime)
+        _set_file_times(&self.as_file(), atime, mtime)
     }
 }
 
@@ -235,7 +235,7 @@ where
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
-        _set_file_times(unsafe { &as_file(self) }, atime, mtime)
+        _set_file_times(&self.as_file(), atime, mtime)
     }
 }
 
