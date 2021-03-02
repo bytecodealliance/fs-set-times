@@ -5,6 +5,7 @@
 
 #![deny(missing_docs)]
 #![cfg_attr(target_os = "wasi", feature(wasi_ext))]
+#![cfg_attr(not(windows), forbid(unsafe_code))]
 
 mod set_times;
 mod system_time_spec;
