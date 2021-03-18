@@ -9,7 +9,6 @@ repository = "https://github.com/bytecodealliance/fs-set-times"
 edition = "2018"
 keywords = ["api", "file"]
 categories = ["filesystem"]
-readme = "README.md"
 
 [dependencies]
 unsafe-io = "0.6.0"
