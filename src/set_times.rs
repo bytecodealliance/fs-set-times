@@ -1,11 +1,12 @@
 use crate::SystemTimeSpec;
+use io_lifetimes::AsFilelike;
 use std::{fs, io, path::Path, time::SystemTime};
-use unsafe_io::AsUnsafeFile;
 #[cfg(not(windows))]
 use {
     posish::{
         fs::{cwd, futimens, utimensat, AtFlags},
-        time::{timespec, UTIME_NOW, UTIME_OMIT},
+        fs::{UTIME_NOW, UTIME_OMIT},
+        time::Timespec,
     },
     std::convert::TryInto,
 };
@@ -59,7 +60,7 @@ fn _set_times(
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
     let times = [to_timespec(atime)?, to_timespec(mtime)?];
-    utimensat(&*cwd(), path, &times, AtFlags::empty())
+    Ok(utimensat(cwd(), path, &times, AtFlags::empty())?)
 }
 
 #[cfg(windows)]
@@ -116,7 +117,7 @@ fn _set_symlink_times(
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
     let times = [to_timespec(atime)?, to_timespec(mtime)?];
-    utimensat(&*cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)
+    Ok(utimensat(cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
 }
 
 /// Like `set_times`, but never follows symlinks.
@@ -165,23 +166,23 @@ pub trait SetTimes {
     ///
     /// [`filetime::set_file_handle_times`]: https://docs.rs/filetime/latest/filetime/fn.set_file_handle_times.html
     fn set_times(
-        &self,
+        self,
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()>;
 }
 
-impl<T> SetTimes for T
+impl<'f, T> SetTimes for T
 where
-    T: AsUnsafeFile,
+    T: AsFilelike<'f>,
 {
     #[inline]
     fn set_times(
-        &self,
+        self,
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
-        _set_file_times(&self.as_file_view(), atime, mtime)
+        _set_file_times(&self.as_filelike_view::<fs::File>(), atime, mtime)
     }
 }
 
@@ -192,18 +193,18 @@ fn _set_file_times(
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
     let times = [to_timespec(atime)?, to_timespec(mtime)?];
-    futimens(file, &times)
+    Ok(futimens(file, &times)?)
 }
 
 #[cfg(not(windows))]
 #[allow(clippy::useless_conversion)]
-pub(crate) fn to_timespec(ft: Option<SystemTimeSpec>) -> io::Result<timespec> {
+pub(crate) fn to_timespec(ft: Option<SystemTimeSpec>) -> io::Result<Timespec> {
     Ok(match ft {
-        None => timespec {
+        None => Timespec {
             tv_sec: 0,
             tv_nsec: UTIME_OMIT.into(),
         },
-        Some(SystemTimeSpec::SymbolicNow) => timespec {
+        Some(SystemTimeSpec::SymbolicNow) => Timespec {
             tv_sec: 0,
             tv_nsec: UTIME_NOW.into(),
         },
@@ -212,7 +213,7 @@ pub(crate) fn to_timespec(ft: Option<SystemTimeSpec>) -> io::Result<timespec> {
             let nanoseconds = duration.subsec_nanos();
             assert_ne!(i64::from(nanoseconds), i64::from(UTIME_OMIT));
             assert_ne!(i64::from(nanoseconds), i64::from(UTIME_NOW));
-            timespec {
+            Timespec {
                 tv_sec: duration
                     .as_secs()
                     .try_into()
