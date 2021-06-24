@@ -60,7 +60,7 @@ fn _set_times(
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
     let times = [to_timespec(atime)?, to_timespec(mtime)?];
-    Ok(utimensat(cwd(), path, &times, AtFlags::empty())?)
+    Ok(utimensat(&cwd(), path, &times, AtFlags::empty())?)
 }
 
 #[cfg(windows)]
@@ -117,7 +117,7 @@ fn _set_symlink_times(
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
     let times = [to_timespec(atime)?, to_timespec(mtime)?];
-    Ok(utimensat(cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
+    Ok(utimensat(&cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
 }
 
 /// Like `set_times`, but never follows symlinks.
@@ -172,10 +172,7 @@ pub trait SetTimes {
     ) -> io::Result<()>;
 }
 
-impl<'f, T> SetTimes for T
-where
-    T: AsFilelike<'f>,
-{
+impl<T: AsFilelike> SetTimes for T {
     #[inline]
     fn set_times(
         self,
