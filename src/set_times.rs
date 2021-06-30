@@ -166,7 +166,7 @@ pub trait SetTimes {
     ///
     /// [`filetime::set_file_handle_times`]: https://docs.rs/filetime/latest/filetime/fn.set_file_handle_times.html
     fn set_times(
-        self,
+        &self,
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()>;
@@ -175,7 +175,7 @@ pub trait SetTimes {
 impl<T: AsFilelike> SetTimes for T {
     #[inline]
     fn set_times(
-        self,
+        &self,
         atime: Option<SystemTimeSpec>,
         mtime: Option<SystemTimeSpec>,
     ) -> io::Result<()> {
