@@ -15,7 +15,7 @@ exclude = ["/.github"]
 io-lifetimes = "0.2.0"
 
 [target.'cfg(not(windows))'.dependencies]
-posish = "0.15.0"
+posish = "0.16.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winerror"] }
