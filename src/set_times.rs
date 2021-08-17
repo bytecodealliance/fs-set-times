@@ -1,6 +1,8 @@
 use crate::SystemTimeSpec;
 use io_lifetimes::AsFilelike;
-use std::{fs, io, path::Path, time::SystemTime};
+use std::path::Path;
+use std::time::SystemTime;
+use std::{fs, io};
 #[cfg(not(windows))]
 use {
     rsix::{
