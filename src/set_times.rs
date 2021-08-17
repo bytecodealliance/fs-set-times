@@ -3,7 +3,7 @@ use io_lifetimes::AsFilelike;
 use std::{fs, io, path::Path, time::SystemTime};
 #[cfg(not(windows))]
 use {
-    posish::{
+    rsix::{
         fs::{cwd, futimens, utimensat, AtFlags},
         fs::{UTIME_NOW, UTIME_OMIT},
         time::Timespec,
