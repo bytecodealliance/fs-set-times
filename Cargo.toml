@@ -12,7 +12,7 @@ categories = ["filesystem"]
 exclude = ["/.github"]
 
 [dependencies]
-io-lifetimes = "0.2.0"
+io-lifetimes = { version = "0.2.2", default-features = false }
 
 [target.'cfg(not(windows))'.dependencies]
 rsix = "0.18.0"
