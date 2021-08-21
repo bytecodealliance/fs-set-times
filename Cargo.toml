@@ -12,10 +12,10 @@ categories = ["filesystem"]
 exclude = ["/.github"]
 
 [dependencies]
-io-lifetimes = { version = "0.2.2", default-features = false }
+io-lifetimes = { version = "0.3.0", default-features = false }
 
 [target.'cfg(not(windows))'.dependencies]
-rsix = "0.18.0"
+rsix = "0.19.1"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winerror"] }
