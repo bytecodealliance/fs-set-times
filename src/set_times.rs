@@ -5,7 +5,7 @@ use std::time::SystemTime;
 use std::{fs, io};
 #[cfg(not(windows))]
 use {
-    rsix::{
+    rustix::{
         fs::{cwd, futimens, utimensat, AtFlags},
         fs::{UTIME_NOW, UTIME_OMIT},
         time::Timespec,
