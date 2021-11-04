@@ -1,17 +1,14 @@
 use crate::SystemTimeSpec;
 use io_lifetimes::AsFilelike;
+#[cfg(not(windows))]
+use rustix::{
+    fs::{cwd, futimens, utimensat, AtFlags},
+    fs::{UTIME_NOW, UTIME_OMIT},
+    time::Timespec,
+};
 use std::path::Path;
 use std::time::SystemTime;
 use std::{fs, io};
-#[cfg(not(windows))]
-use {
-    rustix::{
-        fs::{cwd, futimens, utimensat, AtFlags},
-        fs::{UTIME_NOW, UTIME_OMIT},
-        time::Timespec,
-    },
-    std::convert::TryInto,
-};
 #[cfg(windows)]
 use {
     std::{
