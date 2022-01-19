@@ -6,7 +6,7 @@ use std::{fs, io};
 #[cfg(not(windows))]
 use {
     rustix::{
-        fs::{cwd, futimens, utimensat, AtFlags},
+        fs::{cwd, futimens, utimensat, AtFlags, Timestamps},
         fs::{UTIME_NOW, UTIME_OMIT},
         time::Timespec,
     },
@@ -61,7 +61,10 @@ fn _set_times(
     atime: Option<SystemTimeSpec>,
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
-    let times = [to_timespec(atime)?, to_timespec(mtime)?];
+    let times = Timestamps {
+        last_access: to_timespec(atime)?,
+        last_modification: to_timespec(mtime)?,
+    };
     Ok(utimensat(&cwd(), path, &times, AtFlags::empty())?)
 }
 
@@ -118,7 +121,10 @@ fn _set_symlink_times(
     atime: Option<SystemTimeSpec>,
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
-    let times = [to_timespec(atime)?, to_timespec(mtime)?];
+    let times = Timestamps {
+        last_access: to_timespec(atime)?,
+        last_modification: to_timespec(mtime)?,
+    };
     Ok(utimensat(&cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
 }
 
@@ -191,7 +197,10 @@ fn _set_file_times(
     atime: Option<SystemTimeSpec>,
     mtime: Option<SystemTimeSpec>,
 ) -> io::Result<()> {
-    let times = [to_timespec(atime)?, to_timespec(mtime)?];
+    let times = Timestamps {
+        last_access: to_timespec(atime)?,
+        last_modification: to_timespec(mtime)?,
+    };
     Ok(futimens(file, &times)?)
 }
 
