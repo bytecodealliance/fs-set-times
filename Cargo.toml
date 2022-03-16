@@ -19,6 +19,3 @@ rustix = "0.34.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winerror"] }
-
-[badges]
-maintenance = { status = "actively-developed" }
