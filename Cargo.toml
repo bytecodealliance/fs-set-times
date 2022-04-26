@@ -17,5 +17,9 @@ io-lifetimes = { version = "0.6.0", default-features = false }
 [target.'cfg(not(windows))'.dependencies]
 rustix = "0.34.0"
 
-[target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3.9", features = ["winerror"] }
+[target.'cfg(windows)'.dependencies.windows-sys]
+version = "0.36.0"
+features = [
+    "Win32_Foundation",
+    "Win32_Storage_FileSystem",
+]
