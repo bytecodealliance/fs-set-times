@@ -19,15 +19,9 @@ use {
         ptr,
         time::Duration,
     },
-    winapi::{
-        shared::{
-            minwindef::{DWORD, FILETIME},
-            winerror::ERROR_NOT_SUPPORTED,
-        },
-        um::{
-            fileapi::SetFileTime,
-            winbase::{FILE_FLAG_BACKUP_SEMANTICS, FILE_FLAG_OPEN_REPARSE_POINT},
-        },
+    windows_sys::Win32::Foundation::{ERROR_NOT_SUPPORTED, FILETIME, HANDLE},
+    windows_sys::Win32::Storage::FileSystem::{
+        SetFileTime, FILE_FLAG_BACKUP_SEMANTICS, FILE_FLAG_OPEN_REPARSE_POINT,
     },
 };
 
@@ -265,7 +259,7 @@ fn _set_file_times(
     let mtime = mtime.map(to_filetime).transpose()?;
     if unsafe {
         SetFileTime(
-            file.as_raw_handle() as winapi::um::winnt::HANDLE,
+            file.as_raw_handle() as HANDLE,
             ptr::null(),
             atime.as_ref().map(|r| r as *const _).unwrap_or(ptr::null()),
             mtime.as_ref().map(|r| r as *const _).unwrap_or(ptr::null()),
@@ -299,7 +293,7 @@ fn to_filetime(ft: SystemTime) -> io::Result<FILETIME> {
     }
 
     Ok(FILETIME {
-        dwLowDateTime: intervals as DWORD,
-        dwHighDateTime: (intervals >> 32) as DWORD,
+        dwLowDateTime: intervals as u32,
+        dwHighDateTime: (intervals >> 32) as u32,
     })
 }
