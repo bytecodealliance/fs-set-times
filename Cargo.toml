@@ -12,10 +12,10 @@ categories = ["filesystem"]
 exclude = ["/.github"]
 
 [dependencies]
-io-lifetimes = { version = "0.6.0", default-features = false }
+io-lifetimes = { version = "0.7.0", default-features = false }
 
 [target.'cfg(not(windows))'.dependencies]
-rustix = "0.34.0"
+rustix = { version = "0.35.6", features = ["fs", "time"] }
 
 [target.'cfg(windows)'.dependencies.windows-sys]
 version = "0.36.0"

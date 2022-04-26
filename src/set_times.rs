@@ -59,7 +59,7 @@ fn _set_times(
         last_access: to_timespec(atime)?,
         last_modification: to_timespec(mtime)?,
     };
-    Ok(utimensat(&cwd(), path, &times, AtFlags::empty())?)
+    Ok(utimensat(cwd(), path, &times, AtFlags::empty())?)
 }
 
 #[cfg(windows)]
@@ -119,7 +119,7 @@ fn _set_symlink_times(
         last_access: to_timespec(atime)?,
         last_modification: to_timespec(mtime)?,
     };
-    Ok(utimensat(&cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
+    Ok(utimensat(cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
 }
 
 /// Like `set_times`, but never follows symlinks.
