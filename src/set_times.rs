@@ -276,14 +276,13 @@ fn _set_file_times(
 fn to_filetime(ft: SystemTime) -> io::Result<FILETIME> {
     // To convert a `SystemTime` to absolute seconds and nanoseconds, we need
     // a reference point. The `UNIX_EPOCH` is the only reference point provided
-    // by the standard library, so use that.
+    // by the standard library. But we know that Windows' time stamps are
+    // relative to January 1, 1601 so adjust by the difference between that and
+    // the Unix epoch.
+    let epoch = SystemTime::UNIX_EPOCH - Duration::from_secs(11644473600);
     let ft = ft
-        .duration_since(SystemTime::UNIX_EPOCH)
+        .duration_since(epoch)
         .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
-
-    // Windows' time stamps are relative to January 1, 1601 so adjust by the
-    // difference between that and the Unix epoch.
-    let ft = ft + Duration::from_secs(11_644_473_600);
 
     let intervals = ft.as_secs() * (1_000_000_000 / 100) + u64::from(ft.subsec_nanos() / 100);
 
