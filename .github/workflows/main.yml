@@ -1,3 +1,6 @@
+# TODO: Re-enable fuchsia testing when the rename from x86_64-fuchsia to
+# x86_64-unknown-fuchsia is complete.
+
 name: CI
 
 on:
@@ -58,7 +61,6 @@ jobs:
         x86_64-apple-darwin
         x86_64-unknown-freebsd
         x86_64-unknown-netbsd
-        x86_64-fuchsia
         i686-unknown-linux-gnu
         i686-unknown-linux-musl
         wasm32-unknown-emscripten
@@ -75,7 +77,6 @@ jobs:
     - run: cargo check --workspace --release -vv --target=x86_64-apple-darwin
     - run: cargo check --workspace --release -vv --target=x86_64-unknown-freebsd
     - run: cargo check --workspace --release -vv --target=x86_64-unknown-netbsd
-    - run: cargo check --workspace --release -vv --target=x86_64-fuchsia
     - run: cargo check --workspace --release -vv --target=i686-unknown-linux-gnu
     - run: cargo check --workspace --release -vv --target=i686-unknown-linux-musl
     - run: cargo check --workspace --release -vv --target=wasm32-unknown-emscripten
