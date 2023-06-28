@@ -6,7 +6,7 @@ use std::{fs, io};
 #[cfg(not(windows))]
 use {
     rustix::{
-        fs::{cwd, futimens, utimensat, AtFlags, Timestamps},
+        fs::{futimens, utimensat, AtFlags, Timestamps, CWD},
         fs::{UTIME_NOW, UTIME_OMIT},
         time::Timespec,
     },
@@ -59,7 +59,7 @@ fn _set_times(
         last_access: to_timespec(atime)?,
         last_modification: to_timespec(mtime)?,
     };
-    Ok(utimensat(cwd(), path, &times, AtFlags::empty())?)
+    Ok(utimensat(CWD, path, &times, AtFlags::empty())?)
 }
 
 #[cfg(windows)]
@@ -119,7 +119,7 @@ fn _set_symlink_times(
         last_access: to_timespec(atime)?,
         last_modification: to_timespec(mtime)?,
     };
-    Ok(utimensat(cwd(), path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
+    Ok(utimensat(CWD, path, &times, AtFlags::SYMLINK_NOFOLLOW)?)
 }
 
 /// Like `set_times`, but never follows symlinks.
